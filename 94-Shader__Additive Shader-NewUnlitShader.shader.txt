@@ -13,13 +13,13 @@ Shader "Unlit/#NAME#"
 		LOD 100
 		Blend One One
 		
-# other blend modes listed here: https://docs.unity3d.com/Manual/SL-Blend.html
-# Blend SrcAlpha OneMinusSrcAlpha // Traditional transparency
-# Blend One OneMinusSrcAlpha // Premultiplied transparency
-# Blend One One // Additive
-# Blend OneMinusDstColor One // Soft Additive
-# Blend DstColor Zero // Multiplicative
-# Blend DstColor SrcColor // 2x Multiplicative
+// other blend modes listed here: https://docs.unity3d.com/Manual/SL-Blend.html
+// Blend SrcAlpha OneMinusSrcAlpha // Traditional transparency
+// Blend One OneMinusSrcAlpha // Premultiplied transparency
+// Blend One One // Additive
+// Blend OneMinusDstColor One // Soft Additive
+// Blend DstColor Zero // Multiplicative
+// Blend DstColor SrcColor // 2x Multiplicative
 
 		ZWrite Off
 
