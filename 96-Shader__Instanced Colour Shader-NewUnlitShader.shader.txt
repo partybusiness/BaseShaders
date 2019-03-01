@@ -1,5 +1,14 @@
 Shader "Unlit/#NAME#"
 {
+// This is a demo of how to use instanced properties
+// Instead of rendering in the usual fashion, you can call Graphics.DrawMeshInstance() and pass an array of properties
+// https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstanced.html
+// The script for this one looks something like this:
+// properties = new MaterialPropertyBlock();
+// properties.SetVectorArray("_Color", colours); // where colours is an array of colours
+// and then in an Update function:
+// Graphics.DrawMeshInstanced(mesh, 0, material, matrices, properties);
+
 	Properties
 	{
 		[PerRendererData]_Color ("Color", Color) = (1,1,1,1)
