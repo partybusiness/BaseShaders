@@ -1,0 +1,73 @@
+Shader "Unlit/##NAME##"
+{
+//This grabs from a depth shader, similar to how the Grab Pass shader works.
+//It will be transparent, based on the distance to an opaque surface behind it
+// This will require that the camera is rendering to a depth texture, which might require this script:
+//  camera.depthTextureMode = DepthTextureMode.DepthNormals;
+	Properties
+	{
+		_Color("Color", Color) = (0,0,0,0)
+		_DepthStrength("Depth Strength", float) = 1
+	}
+
+	SubShader
+	{
+		Blend SrcAlpha OneMinusSrcAlpha
+		ZWrite On
+		Cull Back
+
+		Tags
+		{
+			"RenderType" = "Transparent"
+			"Queue" = "Geometry+1"
+		}
+
+		Pass
+		{
+			CGPROGRAM
+			#pragma target 3.0
+			#pragma vertex vert
+			#pragma fragment frag
+
+			#include "UnityCG.cginc"
+
+			struct appdata
+			{
+				float4 vertex : POSITION;
+			};
+
+			struct v2f
+			{
+				float2 uv : TEXCOORD0;
+				float4 projPos : TEXCOORD1; //Screen position of pos
+				float4 vertex : SV_POSITION;
+				float depth : DEPTH;
+			};
+
+			float _DepthStrength;
+
+			sampler2D _CameraDepthNormalsTexture;
+			fixed4 _Color;
+
+			v2f vert(appdata v)
+			{
+				v2f o;
+				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.projPos = ComputeScreenPos(o.vertex);
+				o.depth = -mul(UNITY_MATRIX_MV, v.vertex).z *_ProjectionParams.w;
+				return o;
+			}
+	
+			fixed4 frag(v2f i) : SV_Target
+			{
+				float screenDepth = DecodeFloatRG(tex2D(_CameraDepthNormalsTexture, i.projPos.xy / i.projPos.w).zw);
+				float diff = (screenDepth - i.depth) * 0.3;
+				float intersect = 1 - smoothstep(0, _ProjectionParams.w * _DepthStrength, diff);
+				float glow = 1-intersect;
+
+				return fixed4(_Color.rgb, glow);
+		}
+			ENDCG
+		}
+	}
+}
