@@ -1,5 +1,6 @@
 Shader "Unlit/#NAME#"
 {
+// This just colours everything based on vertex colours
 	Properties
 	{
 		
