@@ -1,5 +1,9 @@
 Shader "UI/#NAME#"
 {
+// this is based on this: https://gist.github.com/Kink3d/7df109ad68cf0cd00fc950a09d9bdaaf
+// but with the dithering stuff removed. So it's a good base UI if you want to do something custom 
+// but with most of the existing UI functionality built in
+
     Properties
     {
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
