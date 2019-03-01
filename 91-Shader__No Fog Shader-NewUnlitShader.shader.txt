@@ -1,7 +1,7 @@
 Shader "Unlit/#NAME#"
 {
 
-#this is just a basic unlit shader with all the fog stuff stripped out, since I usually don't use it
+//this is just a basic unlit shader with all the fog stuff stripped out, since I usually don't use it
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
