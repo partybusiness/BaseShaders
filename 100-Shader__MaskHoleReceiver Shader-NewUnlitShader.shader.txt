@@ -1,11 +1,14 @@
 Shader "Unlit/#NAME#"
 {
+// This works in combination with 100-Shader__MaskHoleMaker using the stencil buffer
+// First, the Maker writes to the stencil buffer, and then this checks the stencil buffer and doesn't render there
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 	}
 	SubShader
 	{
+		// I'm setting the Queue to geo+1 so it always renders after the HoleMaker 
 		Tags { 
 			"RenderType"="Opaque"
 			"Queue" = "Geometry+1"
