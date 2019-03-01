@@ -1,4 +1,4 @@
-Shader "Unlit/##NAME##"
+Shader "Unlit/#NAME#"
 {
 //This grabs from a depth shader, similar to how the Grab Pass shader works.
 //It will be transparent, based on the distance to an opaque surface behind it
