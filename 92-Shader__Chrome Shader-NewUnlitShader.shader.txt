@@ -1,5 +1,7 @@
 Shader "Unlit/#NAME#"
 {
+// This uses a cube map and displays it as though you saw it as a reflection.
+// 
 	Properties{
 		_Cube("Reflection Map", Cube) = "" {}
 	}
@@ -36,6 +38,12 @@ Shader "Unlit/#NAME#"
 			}
 			float4 frag(vertexOutput input) : COLOR
 			{
+			
+			//if, instead of this, you just directly passed input.viewDir like so:
+			//  return texCUBE(_Cube, input.viewDir);
+			//  then the cubemap will look like a sky you can view through a window, defined by this mesh.
+			//  And you could remove everything about normals
+			
 				float3 reflectedDir = reflect(input.viewDir, normalize(input.normalDir));
 				return texCUBE(_Cube, reflectedDir);
 			}
