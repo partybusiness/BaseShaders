@@ -75,6 +75,12 @@ Shader "Path/Name"
 			// the other for what data is passed from the vertex function to the fragment function
 			struct appdata
 			{
+			//most properties are fixed, float, double which determines level of precision
+			// maybe followed by number like 2 3 4 which makes it a vector of that number of elements
+			// then this ALLCAPS declaration of what type of thing it is, which I don't know the full scope of what it can be
+			// and sometimes it uses special words for variable names. Like, here viewDir does get the view direction, 
+			//  not because it's TEXCOORD0 but because it's called viewDir? Or maybe because it's float3 ?
+			// 
 				float4 vertex : POSITION;
 				float3 viewDir : TEXCOORD0;
 				float3 normal : NORMAL;
@@ -101,6 +107,7 @@ Shader "Path/Name"
 				v2f o;
 				//assign every property of o based on properties of v
 				// this is called for each vertex in the mesh
+				// We could fill a lot of space just on everything you can do in these functions, so I'm not doing it here
 				return o;
 			}
 			
@@ -116,6 +123,10 @@ Shader "Path/Name"
 			//closes the CGPROGRAM
 			ENDCG
 		}
+		
+		//one way to reuse passes from multiple shaders so you're not just copying code over
+		// described here: https://docs.unity3d.com/Manual/SL-UsePass.html requires you name your pass
+		UsePass "Path/ShaderName/PassName"
 	}
 	// You can provide a fallback if for some reason this shader can't be used on this computer, it will use a different one
 	// You provide the same Path/Name as the other shader has at the top
