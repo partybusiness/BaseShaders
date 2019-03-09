@@ -5,14 +5,22 @@
 Shader "Path/Name"
 {
 // All properties that can be passed into this shader
+// full list here: https://docs.unity3d.com/Manual/SL-Properties.html
 	Properties
 	{
 	// They're formatted like this:
 	// _VariableName("Display Name", Type) = Default Value
+		// these three are all imported as floats but display differently in the editor
 		_RangedNumber("Ranged Number", Range(0.0, 3.0)) = 1.5
+		_FloatNumber("Float", Float) = 1.5
+		_IntegerNumber("Integer", Int) = 1
 		_MainTex("Texture", 2D) = "white" {}
+		// here's a fancy example with raycasting a 3D texture https://github.com/gillesferrand/Unity-RayTracing
+		// but more often, you'll sample based on position
+		_MainTex3D("3D Texture", 3D) = "white" {}
 		_Color("Colour", Color) = (1,1,1,1)
 		_Cube("Cube Map", Cube) = "" {}
+		//look here for how to use a toggle https://gist.github.com/kodai100/10d1ce3a76276b79ddb33eeb066d263e		
 	}
 	//After properties, have the subshader
 	SubShader
@@ -102,21 +110,28 @@ Shader "Path/Name"
 			fixed4 _Colour;
 			uniform samplerCUBE _Cube;
 
+			// This function takes vertex data and calculates anything that needs to be passed to the fragment function
 			v2f vert (appdata v)
 			{
 				v2f o;
 				//assign every property of o based on properties of v
 				// this is called for each vertex in the mesh
-				// We could fill a lot of space just on everything you can do in these functions, so I'm not doing it here
+				// We could fill a lot of space just on everything you can do in these functions, so I won't do everything here, but just the most common
+				//converts the position from local space of the mesh to world space
+				// if you modify the vertex position, whether you do it before or after changes the effect
+				o.vertex = UnityObjectToClipPos(v.vertex);
+				//this applies the tiling and offset to the uvs from _MainTex_ST
+				//You can assign directly if you don't care, or re-use the same offset on multiple textures
+				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				return o;
 			}
 			
+			// This function calculates the colour that should be displayed at each pixel
+			// The contents of "i" are the results from the vertex function but interpolated between the three vertices that make up a triangle
+			// except i.vertex won't be in world space anymore, but relative to the camera
 			fixed4 frag (v2f i) : SV_Target
 			{
-				// i will contain the results from the vertex function
-				// they will be interpolated based on distance from the three vertices that make up this triangle
-				// This function will calculate for each pixel what colour to display.
-				fixed4 col = tex2D(_MainTex, i.uv);
+				fixed4 col = tex2D(_MainTex, i.uv) * _Colour;
 				return col;
 			}			
 
