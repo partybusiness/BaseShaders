@@ -1,0 +1,53 @@
+Shader "Unlit/#NAME#"
+{
+	Properties
+	{
+		[NoScaleOffset] _Main3DTex ("3D Texture", 3D) = "white" {}
+		_Scale("Scale", Vector) = (1,1,1)
+		_Offset("Offset", Vector) = (0,0,0)
+	}
+	SubShader
+	{
+		Tags { "RenderType"="Opaque" }
+		LOD 100
+
+		Pass
+		{
+			CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
+			
+			#include "UnityCG.cginc"
+
+			struct appdata
+			{
+				float4 vertex : POSITION;
+			};
+
+			struct v2f
+			{
+				float3 worldPos : TEXCOORD0;
+				float4 vertex : SV_POSITION;
+			};
+
+			sampler3D _Main3DTex;
+			float4 _Scale;
+			float4 _Offset;
+			
+			v2f vert (appdata v)
+			{
+				v2f o;
+				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex)*_Scale.xyz + _Offset.xyz;
+				return o;
+			}
+			
+			fixed4 frag (v2f i) : SV_Target
+			{
+				fixed4 col = tex3D(_Main3DTex, i.worldPos).a;
+				return col;
+			}
+			ENDCG
+		}
+	}
+}
