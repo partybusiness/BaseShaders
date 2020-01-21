@@ -44,6 +44,11 @@ Shader "Unlit/#NAME#"
 			//  then the cubemap will look like a sky you can view through a window, defined by this mesh.
 			//  And you could remove everything about normals
 			
+			// Also based on this you could access reflection probes:
+			//  https://www.bitshiftprogrammer.com/2018/11/reflection-probe-custom-shader-tutorial.html
+			//  float4 val = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, reflectedDir);
+			//  reflectedColour.rgb = DecodeHDR(val, unity_SpecCube0_HDR);
+			
 				float3 reflectedDir = reflect(input.viewDir, normalize(input.normalDir));
 				return texCUBE(_Cube, reflectedDir);
 			}
