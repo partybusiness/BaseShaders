@@ -1,6 +1,6 @@
 Shader "Unlit/#NAME#"
 {
-// This shader does do passes, one will render in a normal fashion,
+// This shader does two passes, one will render in a normal fashion,
 //  the other will render behind walls.
 //  It's for a character that's visible as a silhouette when they're behind a wall or something.
 	Properties
